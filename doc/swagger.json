@@ -1,0 +1,634 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "API REST to create notes",
+        "version": "1.0.0",
+        "title": "Notes API REST"
+    },
+    "tags": [
+        {
+            "name": "User",
+            "description": "Create a new user to login"
+        },
+        {
+            "name": "Login",
+            "description": "Login to the app and create a token"
+        },
+        {
+            "name": "Note",
+            "description": "CRUD"
+        }
+    ],
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "Example: Bearer >token<"
+        }
+    },
+    "paths": {
+        "/user": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Create a new user",
+                "operationId": "newUser",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/userParams/body"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "The user has been created successfully.",
+                        "schema": {
+                            "$ref": "#/definitions/User Response OK"
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/responses/BadRequest"
+                    },
+                    "404": {
+                        "$ref": "#/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/responses/ServerError"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Login to the app",
+                "operationId": "login",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/loginParams/body"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login successfully",
+                        "schema": {
+                            "$ref": "#/definitions/Login Response OK"
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/responses/BadRequest"
+                    },
+                    "401": {
+                        "$ref": "#/responses/Unauthorized"
+                    },
+                    "404": {
+                        "$ref": "#/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/responses/ServerError"
+                    }
+                }
+            }
+        },
+        "/note": {
+            "post": {
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Create a new note",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "operationId": "add",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/noteParams/bodyParams"
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Note created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/POST Note Response Ok"
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/responses/BadRequest"
+                    },
+                    "403": {
+                        "$ref": "#/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/responses/ServerError"
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Get notes",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "operationId": "get",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "fromDate",
+                        "description": "start query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "2020-12-03 00:00:00"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "toDate",
+                        "description": "end query",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "2020-12-03 23:59:59"
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "titles",
+                        "description": "Array of titles",
+                        "required": false,
+                        "schema": {
+                            "type": "array",
+                            "example": [
+                                "test",
+                                "test2"
+                            ]
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Get all notes",
+                        "schema": {
+                            "$ref": "#/definitions/GET Note Response OK"
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/responses/BadRequest"
+                    },
+                    "403": {
+                        "$ref": "#/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/responses/ServerError"
+                    }
+                }
+            }
+        },
+        "/note/{noteId}": {
+            "put": {
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Update a note",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "operationId": "update",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/noteParams/urlParams"
+                    },
+                    {
+                        "$ref": "#/noteParams/bodyParams"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Note updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/PUT Note Response OK"
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/responses/BadRequest"
+                    },
+                    "403": {
+                        "$ref": "#/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/responses/ServerError"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Note"
+                ],
+                "summary": "Delete a note",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "operationId": "delete",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/noteParams/urlParams"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Note deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/DELETE Note Response OK"
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/responses/BadRequest"
+                    },
+                    "403": {
+                        "$ref": "#/responses/Forbidden"
+                    },
+                    "404": {
+                        "$ref": "#/responses/NotFound"
+                    },
+                    "500": {
+                        "$ref": "#/responses/ServerError"
+                    }
+                }
+            }
+        }
+    },
+    "userParams": {
+        "body": {
+            "in": "body",
+            "name": "body",
+            "description": "The necesary info to create a new user",
+            "required": true,
+            "schema": {
+                "$ref": "#/definitions/User"
+            }
+        }
+    },
+    "loginParams": {
+        "body": {
+            "in": "body",
+            "name": "body",
+            "description": "The necesary info to login",
+            "required": true,
+            "schema": {
+                "$ref": "#/definitions/Login"
+            }
+        }
+    },
+    "noteParams": {
+        "bodyParams": {
+            "in": "body",
+            "name": "body",
+            "description": "The necesary data in the body",
+            "required": true,
+            "schema": {
+                "$ref": "#/definitions/POST & PUT Note"
+            }
+        },
+        "urlParams": {
+            "name": "noteId",
+            "in": "path",
+            "description": "Note Id",
+            "required": true,
+            "type": "string",
+            "schema": {
+                "type": "string",
+                "example": "5fcfecc680d00e051c6efa87"
+            }
+        }
+    },
+    "responses": {
+        "BadRequest": {
+            "description": "The parameters are incorrect or the resource already exists",
+            "schema": {
+                "$ref": "#/definitions/Generic Error"
+            }
+        },
+        "Unauthorized": {
+            "description": "The email or  password is incorrect",
+            "schema": {
+                "$ref": "#/definitions/Generic Error"
+            }
+        },
+        "Forbidden": {
+            "description": "Invalid token",
+            "schema": {
+                "$ref": "#/definitions/Generic Error"
+            }
+        },
+        "NotFound": {
+            "description": "The Route doesn't exist",
+            "schema": {
+                "$ref": "#/definitions/Generic Error"
+            }
+        },
+        "ServerError": {
+            "description": "Unexpected  error.",
+            "schema": {
+                "$ref": "#/definitions/Generic Error"
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "test"
+                },
+                "lastName": {
+                    "type": "string",
+                    "example": "test"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "test@test.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "test5678"
+                }
+            }
+        },
+        "User Response OK": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "example": "test"
+                        },
+                        "lastName": {
+                            "type": "string",
+                            "example": "test"
+                        },
+                        "email": {
+                            "type": "string",
+                            "example": "test@test.com"
+                        }
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "OK"
+                }
+            }
+        },
+        "Login": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "test@test.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "test5678"
+                }
+            }
+        },
+        "Login Response OK": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "data": {
+                    "type": "string",
+                    "example": "A long string"
+                },
+                "message": {
+                    "type": "string",
+                    "example": "OK"
+                }
+            }
+        },
+        "POST & PUT Note": {
+            "type": "object",
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "example": "test"
+                },
+                "content": {
+                    "type": "string",
+                    "example": "content test"
+                }
+            }
+        },
+        "POST Note Response Ok": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "title": {
+                            "type": "string",
+                            "example": "test"
+                        },
+                        "content": {
+                            "type": "string",
+                            "example": "content test"
+                        },
+                        "_id": {
+                            "type": "string",
+                            "example": "5fcfecc680d00e051c6efa87"
+                        }
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "OK"
+                }
+            }
+        },
+        "GET Note": {
+            "type": "object",
+            "properties": {
+                "fromDate": {
+                    "type": "string",
+                    "example": "2020-12-03 00:00:00"
+                },
+                "toDate": {
+                    "type": "string",
+                    "example": "2020-12-03 23:59:59"
+                },
+                "titles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "enum": [
+                            "test",
+                            "test2"
+                        ]
+                    }
+                }
+            }
+        },
+        "GET Note Response OK": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "_id": {
+                        "type": "string",
+                        "example": "5fcfecc680d00e051c6efa87"
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "test"
+                    },
+                    "content": {
+                        "type": "string",
+                        "example": "content test"
+                    },
+                    "creationDate": {
+                        "type": "string",
+                        "example": "2020-12-08T21:14:46.324Z"
+                    },
+                    "modificationDate": {
+                        "type": "string",
+                        "example": "2020-12-08T21:14:46.325Z"
+                    }
+                }
+            }
+        },
+        "PUT Note Response OK": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "title": {
+                            "type": "string",
+                            "example": "test"
+                        },
+                        "content": {
+                            "type": "string",
+                            "example": "content test"
+                        }
+                    }
+                },
+                "message": {
+                    "type": "string",
+                    "example": "OK"
+                }
+            }
+        },
+        "DELETE Note Response OK": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "data": {
+                    "example": null
+                },
+                "message": {
+                    "type": "string",
+                    "example": "OK"
+                }
+            }
+        },
+        "Generic Error": {
+            "type": "object",
+            "properties": {
+                "success": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "data": {
+                    "example": null
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Error message"
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "Find out more about Swagger",
+        "url": "http://swagger.io"
+    }
+}
