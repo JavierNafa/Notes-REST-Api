@@ -1,11 +1,11 @@
 const MongoClient = require('mongodb').MongoClient,
-    { DB_URL: url = 'mongodb://localhost:27018/', DB_NAME: dbName = 'notes' } = process.env;
+    { MONGO_HOST: host = 'localhost', MONGO_PORT: port = 27017, MONGO_DB_NAME: dbName = 'notes' } = process.env;
 let db = null,
     client = null;
 
 async function connect() {
     try {
-        client = await MongoClient.connect(url, { useUnifiedTopology: true });
+        client = await MongoClient.connect(`mongodb://${host}:${port}/`, { useUnifiedTopology: true });
 
         db = client.db(dbName);
         await db.collection('user').createIndex('email');

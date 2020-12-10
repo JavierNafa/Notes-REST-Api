@@ -1,0 +1,57 @@
+version: "3"
+services:
+  server_mongo:
+    image: mongo:4.4.2
+    container_name: server_mongo
+    restart: unless-stopped
+    ports:
+      - ${MONGO_PORT}:${MONGO_PORT}
+    volumes:
+      - mongoData:/data/db
+    networks:
+      - api-network
+
+  server_redis:
+    image: redis:6.0.9
+    container_name: server_redis
+    restart: unless-stopped
+    ports:
+      - ${REDIS_PORT}:${REDIS_PORT}
+    networks:
+      - api-network
+
+  server_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: notes-api
+    container_name: server_api
+    restart: unless-stopped
+    env_file: .env
+    depends_on:
+      - server_mongo
+      - server_redis
+    links:
+      - "server_mongo"
+      - "server_redis"
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - .:/api
+      - node_modules:/api/node_modules
+    networks:
+      - api-network
+    environment:
+      - WAIT_HOSTS:server_mongo:${MONGO_PORT},server_redis:${REDIS_PORT}
+      - WAIT_HOSTS_TIMEOUT:300
+      - WAIT_SLEEP_INTERVAL:30
+      - WAIT_HOST_CONNECT_TIMEOUT:30
+
+networks:
+  api-network:
+    name: api-network
+    driver: bridge
+
+volumes:
+  mongoData:
+  node_modules:
