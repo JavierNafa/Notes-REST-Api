@@ -1,9 +1,9 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "API REST to create notes",
+        "description": "REST Api to create notes",
         "version": "1.0.0",
-        "title": "Notes API REST"
+        "title": "Notes REST Api"
     },
     "tags": [
         {
@@ -174,7 +174,7 @@
                     {
                         "in": "query",
                         "name": "fromDate",
-                        "description": "start query",
+                        "description": "query start",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -184,7 +184,7 @@
                     {
                         "in": "query",
                         "name": "toDate",
-                        "description": "end query",
+                        "description": "query end",
                         "required": false,
                         "schema": {
                             "type": "string",
@@ -194,7 +194,7 @@
                     {
                         "in": "query",
                         "name": "titles",
-                        "description": "Array of titles",
+                        "description": "Title array",
                         "required": false,
                         "schema": {
                             "type": "array",
@@ -202,6 +202,26 @@
                                 "test",
                                 "test2"
                             ]
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "page",
+                        "description": "page number",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 0
+                        }
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "pagination limit",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
                         }
                     }
                 ],
@@ -295,7 +315,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Note deleted successfully",
+                        "description": "Note successfully removed",
                         "schema": {
                             "$ref": "#/definitions/DELETE Note Response OK"
                         }
@@ -331,7 +351,7 @@
         "body": {
             "in": "body",
             "name": "body",
-            "description": "The necesary info to login",
+            "description": "Registered email and password",
             "required": true,
             "schema": {
                 "$ref": "#/definitions/Login"
@@ -537,6 +557,14 @@
                             "test2"
                         ]
                     }
+                },
+                "page": {
+                    "type": "integer",
+                    "example": 0
+                },
+                "limit": {
+                    "type": "integer",
+                    "example": 10
                 }
             }
         },
