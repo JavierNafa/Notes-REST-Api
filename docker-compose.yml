@@ -38,7 +38,7 @@ services:
       - ${PORT}:${PORT}
     volumes:
       - .:/api
-      - node_modules:/api/node_modules
+      - /api/node_modules
     networks:
       - api-network
     environment:
@@ -60,4 +60,3 @@ networks:
 
 volumes:
   mongoData:
-  node_modules:
