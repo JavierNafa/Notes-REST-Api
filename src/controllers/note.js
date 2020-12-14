@@ -22,13 +22,15 @@ async function postNote(req, res, next) {
 
 async function getNote(req, res, next) {
     try {
-        const { titles, fromDate, toDate } = req.query,
+        const { titles, fromDate, toDate, page, limit } = req.query,
             { userId, key } = res.locals,
             notes = await getNotes({
                 userId,
                 titles,
                 fromDate,
                 toDate,
+                page,
+                limit,
                 key
             });
         return res.status(200).send({ success: true, data: notes, message: 'OK' });

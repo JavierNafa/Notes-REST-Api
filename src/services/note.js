@@ -24,7 +24,7 @@ async function createNote({ userId, title, content }) {
     }
 }
 
-async function getNotes({ userId, titles, fromDate, toDate, key }) {
+async function getNotes({ userId, titles, fromDate, toDate, page, limit, key }) {
     try {
         const notes = await find(collection, {
             userId,
@@ -35,7 +35,7 @@ async function getNotes({ userId, titles, fromDate, toDate, key }) {
                 $gte: moment(fromDate).toDate(),
                 $lte: moment(toDate).toDate()
             } : null
-        }, { userId: 0 });
+        }, { userId: 0 }, page, limit);
         if (notes.length > 0) {
             await set({ key, data: JSON.stringify([...notes]) });
         }

@@ -42,7 +42,9 @@ function getNote() {
                 .query({
                     fromDate: moment().subtract(5, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
                     toDate: moment().format('YYYY-MM-DD HH:mm:ss'),
-                    titles: JSON.stringify(["test"])
+                    titles: JSON.stringify(["test"]),
+                    page: 0,
+                    limit: 10
                 })
                 .set('authorization', `bearer ${global.token}`);
             expect(res.status).toBe(200);
@@ -55,7 +57,9 @@ function getNote() {
                 .query({
                     fromDate: moment().subtract(5, 'minutes').format('YYYY-MM-DD HH:mm:ss'),
                     toDate: moment().format('YYYY-MM-DD HH:mm:ss'),
-                    titles: JSON.stringify(["test"])
+                    titles: JSON.stringify(["test"]),
+                    page: 0,
+                    limit: 10
                 });
             expect(res.status).toBe(403);
             expect(JSON.parse(res.text).success).toBeFalsy();

@@ -18,7 +18,7 @@ module.exports = () => describe('Login test', () => {
         const res = await request.post('/login/')
             .send({
                 email: 'test@test.com',
-                password: 'fail'
+                password: 'fail5678'
             });
         expect(res.status).toBe(401);
         expect(JSON.parse(res.text).success).toBeFalsy();

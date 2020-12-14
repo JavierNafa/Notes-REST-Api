@@ -13,7 +13,9 @@ const get = Joi.object().keys({
         is: null,
         then: Joi.allow(null).only(),
         otherwise: Joi.date().greater(Joi.ref('fromDate')).required()
-    })
+    }),
+    page: Joi.number().integer().min(0),
+    limit: Joi.number().integer().min(0)
 });
 
 const update = Joi.object().keys({
