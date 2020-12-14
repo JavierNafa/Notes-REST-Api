@@ -13,36 +13,11 @@ module.exports = (req, res, next) => {
     if (schema) {
         const validator = _.get(schema, `${method}${url}${path}`);
         if (validator) {
-            switch (method) {
-                case 'POST': {
-                    const { error } = validator.validate({ ...params, ...body });
-                    if (error) {
-                        return next(error);
-                    }
-                    return next();
-                }
-                case 'PUT': {
-                    const { error } = validator.validate({ ...params, ...query, ...body });
-                    if (error) {
-                        return next(error);
-                    }
-                    return next();
-                }
-                case 'GET': {
-                    const { error } = validator.validate({ ...params, ...query });
-                    if (error) {
-                        return next(error);
-                    }
-                    return next();
-                }
-                case 'DELETE': {
-                    const { error } = validator.validate({ ...params, ...query });
-                    if (error) {
-                        return next(error);
-                    }
-                    return next();
-                }
+            const { error } = validator.validate({ ...body, ...params, ...query });
+            if (error) {
+                return next(error);
             }
+            return next();
         }
     }
     return next(new StatusResponseError({ statusCode: 404, message: `This route doesn't exist` }));

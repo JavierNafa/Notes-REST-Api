@@ -1,7 +1,7 @@
 const router = require('express').Router(),
     { postLogin } = require('../controllers/login'),
-    { schemaValidator } = require('../middlewares/index');
+    { schemaValidator, auth: { validateHash } } = require('../middlewares/index');
 
-router.post('/', schemaValidator, postLogin);
+router.post('/', schemaValidator, validateHash, postLogin);
 
 module.exports = router;

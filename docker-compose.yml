@@ -5,7 +5,7 @@ services:
     container_name: server_mongo
     restart: unless-stopped
     ports:
-      - ${MONGO_PORT}:${MONGO_PORT}
+      - 27018:27017
     volumes:
       - mongoData:/data/db
     networks:
@@ -16,7 +16,7 @@ services:
     container_name: server_redis
     restart: unless-stopped
     ports:
-      - ${REDIS_PORT}:${REDIS_PORT}
+      - 6380:6379
     networks:
       - api-network
 
@@ -42,7 +42,13 @@ services:
     networks:
       - api-network
     environment:
-      - WAIT_HOSTS:server_mongo:${MONGO_PORT},server_redis:${REDIS_PORT}
+      - MONGO_HOST=server_mongo
+      - MONGO_PORT=27017
+      - MONGO_DB_NAME=notes
+      - REDIS_HOST=server_redis
+      - REDIS_PORT=6379
+      - REDIS_EXPIRATION=60
+      - WAIT_HOSTS:server_mongo:27017,server_redis:6379
       - WAIT_HOSTS_TIMEOUT:300
       - WAIT_SLEEP_INTERVAL:30
       - WAIT_HOST_CONNECT_TIMEOUT:30

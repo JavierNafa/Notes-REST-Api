@@ -4,10 +4,8 @@ const { connect } = require('./src/database/mongo'),
     { PORT: port = 8000 } = process.env;
 
 connect().then(() => {
-    app.listen(port, () => {
-        console.log(`Running on port ${port}`);
-    });
+    app.listen(port, () => console.log(`Running on port ${port}`));
 }).catch((err) => {
     console.log(err);
-    process.exit(0);
+    process.exit(0)
 });
